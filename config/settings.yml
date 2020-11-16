@@ -1,0 +1,4 @@
+plugins:
+  tl3_enabled:
+    default: true
+    client: true

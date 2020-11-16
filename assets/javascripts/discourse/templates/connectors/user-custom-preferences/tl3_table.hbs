@@ -1,0 +1,104 @@
+
+<label class="control-label">{{i18n "admin.user.tl3_requirements.title"}}</label>
+
+<p>{{i18n "admin.user.tl3_requirements.table_title" count=model.tl3_requirements_time_period}}</p>
+
+<table class="table" style="width: auto;">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>{{i18n "admin.user.tl3_requirements.value_heading"}}</th>
+      <th>{{i18n "admin.user.tl3_requirements.requirement_heading"}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>{{i18n "admin.user.tl3_requirements.visits"}}</th>
+      <td>{{check-icon model.tl3_requirements_met_days_visited}}</td>
+      <td>
+        {{model.tl3_requirements_days_visited_percent}}% ({{model.tl3_requirements_days_visited}} / {{model.tl3_requirements_time_period}} {{i18n "admin.user.tl3_requirements.days"}})
+      </td>
+      <td>{{model.tl3_requirements_min_days_visited_percent}}%</td>
+    </tr>
+    <tr>
+      <th>{{i18n "admin.user.tl3_requirements.topics_replied_to"}}</th>
+      <td>{{check-icon model.tl3_requirements_met_topics_replied_to}}</td>
+      <td>{{model.tl3_requirements_num_topics_replied_to}}</td>
+      <td>{{model.tl3_requirements_min_topics_replied_to}}</td>
+    </tr>
+    <tr>
+      <th>{{i18n "admin.user.tl3_requirements.topics_viewed"}}</th>
+      <td>{{check-icon model.tl3_requirements_met_topics_viewed}}</td>
+      <td>{{model.tl3_requirements_topics_viewed}}</td>
+      <td>{{model.tl3_requirements_min_topics_viewed}}</td>
+    </tr>
+    <tr>
+      <th>{{i18n "admin.user.tl3_requirements.topics_viewed_all_time"}}</th>
+      <td>{{check-icon model.tl3_requirements_met_topics_viewed_all_time}}</td>
+      <td>{{model.tl3_requirements_topics_viewed_all_time}}</td>
+      <td>{{model.tl3_requirements_min_topics_viewed_all_time}}</td>
+    </tr>
+    <tr>
+      <th>{{i18n "admin.user.tl3_requirements.posts_read"}}</th>
+      <td>{{check-icon model.tl3_requirements_met_posts_read}}</td>
+      <td>{{model.tl3_requirements_posts_read}}</td>
+      <td>{{model.tl3_requirements_min_posts_read}}</td>
+    </tr>
+    <tr>
+      <th>{{i18n "admin.user.tl3_requirements.posts_read_all_time"}}</th>
+      <td>{{check-icon model.tl3_requirements_met_posts_read_all_time}}</td>
+      <td>{{model.tl3_requirements_posts_read_all_time}}</td>
+      <td>{{model.tl3_requirements_min_posts_read_all_time}}</td>
+    </tr>
+    <tr>
+      <th>{{i18n "admin.user.tl3_requirements.flagged_posts"}}</th>
+      <td>{{check-icon model.tl3_requirements_met_flagged_posts}}</td>
+      <td>{{model.tl3_requirements_num_flagged_posts}}</td>
+      <td>{{i18n "max_of_count" count=model.tl3_requirements_max_flagged_posts}}</td>
+    </tr>
+    <tr>
+      <th>{{i18n "admin.user.tl3_requirements.flagged_by_users"}}</th>
+      <td>{{check-icon model.tl3_requirements_met_flagged_by_users}}</td>
+      <td>{{model.tl3_requirements_num_flagged_by_users}}</td>
+      <td>{{i18n "max_of_count" count=model.tl3_requirements_max_flagged_by_users}}</td>
+    </tr>
+    <tr>
+      <th>{{i18n "admin.user.tl3_requirements.likes_given"}}</th>
+      <td>{{check-icon model.tl3_requirements_met_likes_given}}</td>
+      <td>{{model.tl3_requirements_num_likes_given}}</td>
+      <td>{{model.tl3_requirements_min_likes_given}}</td>
+    </tr>
+    <tr>
+      <th>{{i18n "admin.user.tl3_requirements.likes_received"}}</th>
+      <td>{{check-icon model.tl3_requirements_met_likes_received}}</td>
+      <td>{{model.tl3_requirements_num_likes_received}}</td>
+      <td>{{model.tl3_requirements_min_likes_received}}</td>
+    </tr>
+    <tr>
+      <th>{{i18n "admin.user.tl3_requirements.likes_received_days"}}</th>
+      <td>{{check-icon model.tl3_requirements_met_likes_received_days}}</td>
+      <td>{{model.tl3_requirements_num_likes_received_days}}</td>
+      <td>{{model.tl3_requirements_min_likes_received_days}}</td>
+    </tr>
+    <tr>
+      <th>{{i18n "admin.user.tl3_requirements.likes_received_users"}}</th>
+      <td>{{check-icon model.tl3_requirements_met_likes_received_users}}</td>
+      <td>{{model.tl3_requirements_num_likes_received_users}}</td>
+      <td>{{model.tl3_requirements_min_likes_received_users}}</td>
+    </tr>
+    <tr>
+      <th>{{i18n "admin.user.tl3_requirements.silenced"}}</th>
+      <td>{{check-icon model.tl3_requirements_met_silenced}}</td>
+      <td>{{model.tl3_requirements_penalty_counts_silenced}}</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>{{i18n "admin.user.tl3_requirements.suspended"}}</th>
+      <td>{{check-icon model.tl3_requirements_met_suspended}}</td>
+      <td>{{model.tl3_requirements_penalty_counts_suspended}}</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+
