@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # name: tl3
-# about: Show trust level 3 requirements to users
+# about: show tl3 requirements to users
 # version: 0.1
 # authors: chenyxuan
 # url: https://github.com/chenyxuan
@@ -18,224 +18,71 @@ load File.expand_path('lib/tl3/engine.rb', __dir__)
 
 after_initialize do
   # https://github.com/discourse/discourse/blob/master/lib/plugin/instance.rb
-  class ::UserSerializer
-    attributes :tl3_requirements_days_visited,
-               :tl3_requirements_time_period,
-               :tl3_requirements_met_days_visited,
-               :tl3_requirements_min_days_visited_percent,
-               :tl3_requirements_met_topics_replied_to,
-               :tl3_requirements_num_topics_replied_to,
-               :tl3_requirements_min_topics_replied_to,
-               :tl3_requirements_met_topics_viewed,
-               :tl3_requirements_topics_viewed,
-               :tl3_requirements_min_topics_viewed,
-               :tl3_requirements_met_topics_viewed_all_time,
-               :tl3_requirements_topics_viewed_all_time,
-               :tl3_requirements_min_topics_viewed_all_time,
-               :tl3_requirements_met_posts_read,
-               :tl3_requirements_posts_read,
-               :tl3_requirements_min_posts_read,
-               :tl3_requirements_met_posts_read_all_time,
-               :tl3_requirements_posts_read_all_time,
-               :tl3_requirements_min_posts_read_all_time,
-               :tl3_requirements_met_flagged_posts,
-               :tl3_requirements_num_flagged_posts,
-               :tl3_requirements_max_flagged_posts,
-               :tl3_requirements_days_visited_percent,
-               :tl3_requirements_met_flagged_by_users,
-               :tl3_requirements_num_flagged_by_users,
-               :tl3_requirements_max_flagged_by_users,
-               :tl3_requirements_met_likes_given,
-               :tl3_requirements_num_likes_given,
-               :tl3_requirements_min_likes_given,
-               :tl3_requirements_met_likes_received,
-               :tl3_requirements_num_likes_received,
-               :tl3_requirements_min_likes_received,
-               :tl3_requirements_met_likes_received_days,
-               :tl3_requirements_num_likes_received_days,
-               :tl3_requirements_min_likes_received_days,
-               :tl3_requirements_met_likes_received_users,
-               :tl3_requirements_num_likes_received_users,
-               :tl3_requirements_min_likes_received_users,
-               :tl3_requirements_met_silenced,
-               :tl3_requirements_penalty_counts_silenced,
-               :tl3_requirements_met_suspended,
-               :tl3_requirements_penalty_counts_suspended
-               
-    def tl3_requirements_days_visited
-      object.tl3_requirements.days_visited
-    end
-      
-    def tl3_requirements_num_topics_replied_to
-      object.tl3_requirements.num_topics_replied_to
-    end
-    
-    def tl3_requirements_met_days_visited
-      tl3_requirements_days_visited >= SiteSetting.tl3_requires_days_visited
-    end
-    
-    def tl3_requirements_met_topics_replied_to
-      tl3_requirements_num_topics_replied_to >= SiteSetting.tl3_requires_topics_replied_to
-    end
-    
-    def tl3_requirements_time_period
-      SiteSetting.tl3_time_period
-    end
-    
-    def tl3_requirements_days_visited_percent
-      100 * tl3_requirements_days_visited / tl3_requirements_time_period
-    end
-    
-    def tl3_requirements_min_days_visited_percent
-      100 * SiteSetting.tl3_requires_days_visited / tl3_requirements_time_period
-    end
-    
-    def tl3_requirements_min_topics_replied_to
-      SiteSetting.tl3_requires_topics_replied_to
-    end
-    
-    def tl3_requirements_met_topics_viewed
-      tl3_requirements_topics_viewed >= tl3_requirements_min_topics_viewed
-    end
-    
-    def tl3_requirements_topics_viewed
-      object.tl3_requirements.topics_viewed
-    end
-    
-    def tl3_requirements_min_topics_viewed
-      [
-        (TrustLevel3Requirements.num_topics_in_time_period.to_i * (SiteSetting.tl3_requires_topics_viewed.to_f / 100.0)).round,
-        SiteSetting.tl3_requires_topics_viewed_cap
-      ].min
-    end
-    
-    def tl3_requirements_met_topics_viewed_all_time
-      tl3_requirements_topics_viewed_all_time >= tl3_requirements_min_topics_viewed_all_time
-    end
-    
-    def tl3_requirements_min_topics_viewed_all_time
-      SiteSetting.tl3_requires_topics_viewed_all_time
-    end
-    
-    def tl3_requirements_topics_viewed_all_time
-      object.tl3_requirements.topics_viewed_all_time
-    end
+  class ::UsersController
+    module OverridingShow
+      def show(for_card: false)
+        return redirect_to path('/login') if SiteSetting.hide_user_profiles_from_public && !current_user
 
-    def tl3_requirements_met_posts_read
-      tl3_requirements_posts_read >= tl3_requirements_min_posts_read
-    end
-    
-    def tl3_requirements_posts_read
-      object.tl3_requirements.posts_read
-    end
-    
-    def tl3_requirements_min_posts_read
-      [
-        (TrustLevel3Requirements.num_posts_in_time_period.to_i * (SiteSetting.tl3_requires_posts_read.to_f / 100.0)).round,
-        SiteSetting.tl3_requires_posts_read_cap
-      ].min
-    end
+        @user = fetch_user_from_params(
+          include_inactive: current_user.try(:staff?) || (current_user && SiteSetting.show_inactive_accounts)
+        )
 
-    def tl3_requirements_met_posts_read_all_time
-      tl3_requirements_posts_read_all_time >= tl3_requirements_min_posts_read_all_time
-    end
-    
-    def tl3_requirements_posts_read_all_time
-      object.tl3_requirements.posts_read_all_time
-    end
-    
-    def tl3_requirements_min_posts_read_all_time
-      SiteSetting.tl3_requires_posts_read_all_time
-    end
-    
-    def tl3_requirements_met_flagged_posts
-      tl3_requirements_num_flagged_posts <= tl3_requirements_max_flagged_posts
-    end
-    
-    def tl3_requirements_num_flagged_posts
-      object.tl3_requirements.num_flagged_posts
-    end
-    
-    def tl3_requirements_max_flagged_posts
-      SiteSetting.tl3_requires_max_flagged
-    end
-   
-   
-    def tl3_requirements_met_flagged_by_users
-      tl3_requirements_num_flagged_by_users <= tl3_requirements_max_flagged_by_users
-    end
-    
-    def tl3_requirements_num_flagged_by_users
-      object.tl3_requirements.num_flagged_by_users
-    end
-    
-    def tl3_requirements_max_flagged_by_users
-      SiteSetting.tl3_requires_max_flagged
-    end
-   
-    def tl3_requirements_met_likes_given
-      tl3_requirements_num_likes_given >= tl3_requirements_min_likes_given
-    end
-    
-    def tl3_requirements_num_likes_given
-      object.tl3_requirements.num_likes_given
-    end
-    
-    def tl3_requirements_min_likes_given
-      SiteSetting.tl3_requires_likes_given
-    end
+        user_serializer = nil
+        if guardian.can_see_profile?(@user)
+          serializer_class = for_card ? UserCardSerializer : UserSerializer
+          user_serializer = serializer_class.new(@user, scope: guardian, root: 'user')
+          user_tl3_serializer = for_card ? nil : TrustLevel3RequirementsSerializer.new(@user.tl3_requirements)
+          
+          topic_id = params[:include_post_count_for].to_i
+          if topic_id != 0
+            user_serializer.topic_post_count = { topic_id => Post.secured(guardian).where(topic_id: topic_id, user_id: @user.id).count }
+          end
+        else
+          user_serializer = HiddenProfileSerializer.new(@user, scope: guardian, root: 'user')
+        end
 
-    def tl3_requirements_met_likes_received
-      tl3_requirements_num_likes_received >= tl3_requirements_min_likes_received
-    end
-    
-    def tl3_requirements_num_likes_received
-      object.tl3_requirements.num_likes_received
-    end
-    
-    def tl3_requirements_min_likes_received
-      SiteSetting.tl3_requires_likes_received
-    end
-    
+        if !params[:skip_track_visit] && (@user != current_user)
+          track_visit_to_user_profile
+        end
 
-    def tl3_requirements_met_likes_received_days
-      tl3_requirements_num_likes_received_days >= tl3_requirements_min_likes_received_days
+        # This is a hack to get around a Rails issue where values with periods aren't handled correctly
+        # when used as part of a route.
+        if params[:external_id] && params[:external_id].ends_with?('.json')
+          return render_json_dump(user_serializer)
+        end
+
+        respond_to do |format|
+          format.html do
+            logFile = File.new("tl3.log", "a")
+            logFile.syswrite("html\n")
+            logFile.close
+            @restrict_fields = guardian.restrict_user_fields?(@user)
+            store_preloaded("user_#{@user.username}", MultiJson.dump(user_serializer))
+          end
+
+          format.json do
+            logFile = File.new("tl3.log", "a")
+            logFile.syswrite("json\n")
+            logFile.close
+            if user_tl3_serializer.nil?
+              render_json_dump(user_serializer)
+            else
+              user_json = MultiJson.dump(user_serializer)
+              user_tl3_json = MultiJson.dump(user_tl3_serializer)
+              user_hash = MultiJson.load(user_json)
+              user_tl3_hash = MultiJson.load(user_tl3_json)
+              user_hash["user"] = user_hash["user"].merge(user_tl3_hash)
+              render json: MultiJson.dump(user_hash)
+              logFile = File.new("tl3.log", "a")
+              logFile.syswrite("#{MultiJson.dump(user_hash)}\n")
+              logFile.close
+            end
+          end
+        end
+      end
     end
     
-    def tl3_requirements_num_likes_received_days
-      object.tl3_requirements.num_likes_received_days
-    end
+    prepend OverridingShow
     
-    def tl3_requirements_min_likes_received_days
-      object.tl3_requirements.min_likes_received_days
-    end
-      
-    def tl3_requirements_met_likes_received_users
-      tl3_requirements_num_likes_received_users >= tl3_requirements_min_likes_received_users
-    end
-    
-    def tl3_requirements_num_likes_received_users
-      object.tl3_requirements.num_likes_received_users
-    end
-    
-    def tl3_requirements_min_likes_received_users
-      object.tl3_requirements.min_likes_received_users
-    end
-    
-    def tl3_requirements_met_silenced
-      !object.silenced?
-    end
-    
-    def tl3_requirements_penalty_counts_silenced
-      object.tl3_requirements.penalty_counts.silenced
-    end
-    
-    def tl3_requirements_met_suspended
-      !object.suspended?
-    end
-    
-    def tl3_requirements_penalty_counts_suspended
-      object.tl3_requirements.penalty_counts.suspended
-    end
   end
 end

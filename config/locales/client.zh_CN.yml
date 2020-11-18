@@ -1,0 +1,31 @@
+zh_CN:
+  js:
+    tl3_requirements:
+      title: "活跃用户要求"
+      table_title:
+        other: "在最近 %{count} 天："
+      value_heading: "当前"
+      requirement_heading: "要求"
+      visits: "访问"
+      days: "天数"
+      topics_replied_to: "回复的主题"
+      topics_viewed: "已读主题"
+      topics_viewed_all_time: "已阅的主题（全部）"
+      posts_read: "已读帖子"
+      posts_read_all_time: "已读的帖子（全部）"
+      flagged_posts: "被标记的帖子"
+      flagged_by_users: "标记其的用户"
+      likes_given: "点赞"
+      likes_received: "获赞"
+      likes_received_days: "获赞：独立天数"
+      likes_received_users: "获赞：每用户"
+      suspended: "已封禁（最近6个月）"
+      silenced: "禁言（最近6个月）"
+      qualifies: "符合信任等级3要求"
+      does_not_qualify: "不符合信任等级3要求"
+      will_be_promoted: "将在近期被提升。"
+      will_be_demoted: "将在近期被降级。"
+      on_grace_period: "目前在升级宽限期，不会被降级。"
+      locked_will_not_be_promoted: "信任等级被锁定。将不再被提升。"
+      locked_will_not_be_demoted: "信任等级被锁定。将不再被降级。"
+
